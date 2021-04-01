@@ -9,6 +9,12 @@ For example: double each elements in list
 [0, 1, 2, 3] -> [0, 2, 4, 6]
 ```
 
+# [Iterate List with IO](iterate_list_with_op.py)
+For example: double each elements in list
+```
+[0, 1, 2, 3] -> [0, 2, 4, 6] (with sleep)
+```
+
 # [Manippulate List](manippulate_list.py)
 Manipulate each elements in list in-place.
 

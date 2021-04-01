@@ -1,50 +1,51 @@
 import time
 import concurrent.futures
 import multiprocessing
-from functools import partial           # for multiprocessing.Pool.map
-from operator import mul            # for multiprocessing.Pool.map
 
 # Measurement methods
-def measure_time(func, input, n_loop=10000):
+def measure_time(func, input, n_loop=100):
     start = time.time()
     for _ in range(n_loop):
         func(input)
     return (time.time() - start) / float(n_loop)
 
-
+# Dummy IO function
+def dummy_io(x):
+    time.sleep(0.001)
+    return x * 2
 
 
 def for_loop(input):
     for x in input:
-        yield x * 2
+        yield dummy_io(x)
 
 def for_range(input):
     for i in range(len(input)):
-        yield input[i] * 2
+        yield dummy_io(input[i])
 
 def for_enumerate(input):
     for i, x in enumerate(input):
-        yield x * 2
+        yield dummy_io(x)
 
 def map_list(input):
-    return map(lambda x: x * 2, input)
+    return map(dummy_io, input)
 
 def thread_pool_executer_map(input):
     with concurrent.futures.ThreadPoolExecutor(max_workers=10) as tpe:
-        return tpe.map(lambda x: x * 2, input)
+        return tpe.map(dummy_io, input)
 
 def multiprocessing_pool_map(input):
     with multiprocessing.Pool(processes=10) as mp:
-        return mp.map(partial(mul, 2), input)
+        return mp.map(dummy_io, input)
 
 def list_comprehension(input):
-    return [x * 2 for x in input]
+    return [dummy_io(x) for x in input]
     
 def range_list_comprehension(input):
-    return [input[i] * 2 for i in range(len(input))]
+    return [dummy_io(input[i]) for i in range(len(input))]
     
 def list_enumerate_comprehension(input):
-    return [x * 2 for i, x in enumerate(input)]
+    return [dummy_io(x) for i, x in enumerate(input)]
 
 print('Check results: [0, 2, 4, 6, 8]')
 
